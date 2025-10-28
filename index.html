@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthMate - Symptom Checker & Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .bg-gradient-blue {
+            background: linear-gradient(135deg, #007bff, #00d2ff);
+        }
+        .parallax-bg {
+            background-image: url('https://placehold.co/1920x1080/E0F2F7/007bff?text=HealthMate');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        .parallax-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(1px);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-gradient-blue text-white p-6 shadow-lg fixed top-0 w-full z-20">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold">HealthMate</h1>
+            <nav>
+                <ul class="flex space-x-6 text-lg">
+                    <li><a href="#" class="hover:underline transition-transform transform hover:scale-105 active:scale-95">Home</a></li>
+                    <li><a href="#health-dashboard" class="hover:underline transition-transform transform hover:scale-105 active:scale-95">Dashboard</a></li>
+                    <li><a href="#symptom-checker" class="hover:underline transition-transform transform hover:scale-105 active:scale-95">Symptom Checker</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow container mx-auto p-4 sm:p-6 lg:p-8 mt-24">
+        <!-- Hero Section -->
+        <section class="text-center p-8 sm:p-12 lg:p-16 rounded-3xl shadow-xl mb-8 parallax-bg">
+            <div class="relative z-10">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">Your Personal Health Companion</h2>
+                <p class="text-lg sm:text-xl text-gray-600 mb-6 max-w-2xl mx-auto">Take control of your well-being with HealthMate's intuitive symptom checker and personalized health dashboard.</p>
+                <a href="#health-dashboard" class="inline-block bg-gradient-blue text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 active:scale-95">Explore Dashboard</a>
+            </div>
+        </section>
+
+        <!-- Health Dashboard Section -->
+        <section id="health-dashboard" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">Health Dashboard</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Ongoing Problems Log Card -->
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-md border border-slate-200">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Ongoing Health Problems</h3>
+                    <div class="space-y-4">
+                         <label for="problems-select" class="block text-gray-700 font-semibold mb-2">Select your ongoing problems:</label>
+                         <select id="problems-select" name="problems-select" multiple class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+                             <option value="asthma">Asthma</option>
+                             <option value="diabetes">Diabetes</option>
+                             <option value="hypertension">Hypertension</option>
+                             <option value="anxiety">Anxiety</option>
+                             <option value="irritable bowel syndrome">Irritable Bowel Syndrome</option>
+                             <option value="arthritis">Arthritis</option>
+                             <option value="migraine">Migraine</option>
+                             <option value="allergies">Allergies</option>
+                             <option value="thyroid disorder">Thyroid Disorder</option>
+                         </select>
+                         <button id="add-problems-btn" class="w-full bg-red-500 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-red-600 transition-colors transform hover:scale-105 active:scale-95">Add Selected Problems</button>
+                    </div>
+                    <div id="problems-list" class="mt-4 space-y-2">
+                        <!-- Problems will be dynamically added here -->
+                    </div>
+                </div>
+
+                <!-- Medication Log Card -->
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-md border border-slate-200">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Medication Log</h3>
+                    <div id="medication-input-card">
+                         <form id="medication-form" class="space-y-4">
+                            <label class="block text-gray-700 font-semibold mb-2">Select a health problem to see related medicines:</label>
+                             <div id="medications-by-problem-list">
+                                 <!-- Checkboxes will be dynamically added here -->
+                             </div>
+                             <div>
+                                <label for="other-med-input" class="block text-gray-700 font-semibold mt-4 mb-2">Or, add a new medicine not in the list:</label>
+                                <input type="text" id="other-med-input" placeholder="e.g., Vitamin C" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all">
+                             </div>
+                            <button type="submit" class="w-full bg-orange-500 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-orange-600 transition-colors transform hover:scale-105 active:scale-95">Submit Medications</button>
+                        </form>
+                    </div>
+                    <div id="medication-list" class="mt-4 space-y-2">
+                        <!-- Medications will be dynamically added here -->
+                    </div>
+                </div>
+                
+                <!-- Health Metrics Input Card -->
+                <div class="bg-slate-50 p-6 rounded-2xl shadow-md border border-slate-200">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Track Your Metrics</h3>
+                    <form id="metrics-form" class="space-y-4">
+                        <div>
+                            <label for="metric-type" class="block text-gray-700 font-semibold mb-2">Metric:</label>
+                            <select id="metric-type" name="metric-type" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                                <option value="weight">Weight (kg)</option>
+                                <option value="bloodPressure">Blood Pressure (mmHg)</option>
+                                <option value="steps">Steps</option>
+                                <option value="sleep">Sleep (hours)</option>
+                            </select>
+                        </div>
+                        <div id="input-fields">
+                            <!-- Dynamic input fields will be inserted here by JS -->
+                        </div>
+                        <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-600 transition-colors transform hover:scale-105 active:scale-95">Add Metric</button>
+                    </form>
+                </div>
+
+                <!-- Metrics Visualization Card -->
+                <div class="md:col-span-2 lg:col-span-3 bg-slate-50 p-6 rounded-2xl shadow-md border border-slate-200">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">Your Health Trends</h3>
+                    <div id="metric-chart-container" class="w-full h-64 sm:h-80">
+                         <canvas id="metric-chart" class="w-full h-full"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Timeline & Insights Card -->
+                <div class="md:col-span-2 lg:col-span-3 bg-slate-50 p-6 rounded-2xl shadow-md border border-slate-200">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-800">My Health Story</h3>
+                    <div id="health-timeline" class="space-y-4">
+                        <div id="no-history" class="text-center text-gray-500 p-4">Your health story is empty. Start tracking to see your journey here!</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Symptom Checker Section -->
+        <section id="symptom-checker" class="bg-white p-6 sm:p-8 rounded-3xl shadow-xl mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">Symptom Checker</h2>
+            <div class="max-w-xl mx-auto">
+                <p class="text-sm text-center text-red-500 font-medium mb-4 p-3 bg-red-50 rounded-xl border border-red-200">
+                    Disclaimer: This tool is for informational purposes only and is not a substitute for professional medical advice. Always consult a healthcare professional.
+                </p>
+                <form id="symptom-form" class="space-y-4">
+                    <div>
+                        <label for="symptoms" class="block text-gray-700 font-semibold mb-2">Enter your symptoms:</label>
+                        <input type="text" id="symptoms" name="symptoms" placeholder="e.g., headache, fever, cough..." class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        <ul id="suggestion-list" class="bg-white border border-gray-300 rounded-lg mt-1 max-h-40 overflow-y-auto hidden"></ul>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-blue text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95">Check Symptoms</button>
+                </form>
+            </div>
+            <div id="results-section" class="mt-8 hidden">
+                <div id="results-output" class="bg-blue-50 p-6 rounded-2xl border border-blue-200 shadow-inner"></div>
+                <button id="add-meds-to-log" class="mt-4 bg-green-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-green-600 transition-colors transform hover:scale-105 active:scale-95 hidden">Add Suggested Medications to Log</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-200 p-6 text-center text-gray-600">
+        <div class="container mx-auto">
+            <p>&copy; 2024 HealthMate. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const symptomForm = document.getElementById('symptom-form');
+            const symptomsInput = document.getElementById('symptoms');
+            const suggestionList = document.getElementById('suggestion-list');
+            const resultsOutput = document.getElementById('results-output');
+            const resultsSection = document.getElementById('results-section');
+            const addMedsToLogBtn = document.getElementById('add-meds-to-log');
+            const metricsForm = document.getElementById('metrics-form');
+            const metricTypeSelect = document.getElementById('metric-type');
+            const inputFieldsContainer = document.getElementById('input-fields');
+            const healthTimeline = document.getElementById('health-timeline');
+            const noHistoryMessage = document.getElementById('no-history');
+            const medicationForm = document.getElementById('medication-form');
+            const medicationList = document.getElementById('medication-list');
+            const problemsSelect = document.getElementById('problems-select');
+            const addProblemsBtn = document.getElementById('add-problems-btn');
+            const problemsList = document.getElementById('problems-list');
+            const medicationsByProblemList = document.getElementById('medications-by-problem-list');
+            const otherMedInput = document.getElementById('other-med-input');
+            const medicationInputCard = document.getElementById('medication-input-card');
+
+            // Data storage for the app
+            const HEALTH_DATA_KEY = 'healthMateData';
+            let healthData = JSON.parse(localStorage.getItem(HEALTH_DATA_KEY)) || {
+                symptomHistory: [],
+                metrics: {
+                    weight: [],
+                    bloodPressure: [],
+                    steps: [],
+                    sleep: []
+                },
+                medications: [],
+                problems: []
+            };
+
+            // Expanded mock symptom dataset with scores for a pseudo-ML approach
+            const symptomDataSet = {
+                "headache": {
+                    "common cold": 1,
+                    "migraine": 5,
+                    "hypertension": 3,
+                    "anxiety": 2
+                },
+                "fever": {
+                    "common cold": 4,
+                    "flu": 5,
+                    "infection": 3
+                },
+                "cough": {
+                    "common cold": 3,
+                    "flu": 4,
+                    "asthma": 5,
+                    "allergies": 2
+                },
+                "sore throat": {
+                    "common cold": 2,
+                    "strep throat": 5,
+                    "allergies": 2
+                },
+                "nausea": {
+                    "indigestion": 4,
+                    "food poisoning": 5,
+                    "migraine": 2
+                },
+                "fatigue": {
+                    "common cold": 2,
+                    "flu": 3,
+                    "anxiety": 4,
+                    "thyroid disorder": 5
+                },
+                "dizziness": {
+                    "dehydration": 3,
+                    "hypertension": 4,
+                    "anxiety": 2
+                },
+                "chest pain": {
+                    "indigestion": 2,
+                    "anxiety": 5,
+                    "heart attack": 10 // High score for critical symptom
+                },
+                "abdominal pain": {
+                    "indigestion": 3,
+                    "irritable bowel syndrome": 5,
+                    "food poisoning": 4
+                },
+                "rash": {
+                    "allergies": 5,
+                    "irritation": 3
+                }
+            };
+            
+            // Mock Data for medication suggestions based on problems
+            const problemMedications = {
+                "asthma": ["Albuterol", "Fluticasone", "Prednisone"],
+                "diabetes": ["Metformin", "Insulin", "Glipizide"],
+                "hypertension": ["Lisinopril", "Amlodipine", "Hydrochlorothiazide"],
+                "anxiety": ["Xanax", "Lexapro", "Buspirone"],
+                "irritable bowel syndrome": ["Peppermint oil capsules", "Loperamide", "Dicyclomine"],
+                "arthritis": ["Ibuprofen", "Naproxen", "Celecoxib"],
+                "migraine": ["Sumatriptan", "Rizatriptan", "Propranolol"],
+                "allergies": ["Cetirizine", "Loratadine", "Diphenhydramine"],
+                "thyroid disorder": ["Levothyroxine"]
+            };
+
+            const conditionMedications = {
+                "common cold": ["Ibuprofen", "Paracetamol", "Decongestants"],
+                "flu": ["Tamiflu (prescription)", "Paracetamol", "Ibuprofen"],
+                "migraine": ["Sumatriptan", "Ibuprofen"],
+                "hypertension": ["Lisinopril", "Amlodipine"],
+                "anxiety": ["Xanax", "Lexapro", "Mindfulness"],
+                "strep throat": ["Penicillin (prescription)"],
+                "indigestion": ["Antacids", "Ranitidine"],
+                "food poisoning": ["Oral rehydration salts"],
+                "dehydration": ["Oral rehydration salts"],
+                "heart attack": ["Aspirin (as directed by 911)"],
+                "irritable bowel syndrome": ["Peppermint oil capsules"],
+                "allergies": ["Cetirizine", "Loratadine"],
+                "thyroid disorder": ["Levothyroxine"]
+            };
+
+            // Chart.js setup
+            let myChart = null;
+
+            // --- Symptom Checker Logic ---
+
+            symptomsInput.addEventListener('input', () => {
+                const query = symptomsInput.value.toLowerCase();
+                suggestionList.innerHTML = '';
+                if (query.length > 1) {
+                    const suggestions = Object.keys(symptomDataSet).filter(s => s.startsWith(query));
+                    if (suggestions.length > 0) {
+                        suggestionList.classList.remove('hidden');
+                        suggestions.forEach(symptom => {
+                            const li = document.createElement('li');
+                            li.textContent = symptom;
+                            li.className = 'p-2 cursor-pointer hover:bg-blue-100 transition-colors';
+                            li.addEventListener('click', () => {
+                                symptomsInput.value = symptom;
+                                suggestionList.classList.add('hidden');
+                                suggestionList.innerHTML = '';
+                            });
+                            suggestionList.appendChild(li);
+                        });
+                    } else {
+                        suggestionList.classList.add('hidden');
+                    }
+                } else {
+                    suggestionList.classList.add('hidden');
+                }
+            });
+
+            symptomForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const symptom = symptomsInput.value.toLowerCase().trim();
+                const currentProblems = healthData.problems.map(p => p.name.toLowerCase());
+                const currentMedications = healthData.medications.map(m => m.name.toLowerCase());
+                resultsSection.classList.remove('hidden');
+                addMedsToLogBtn.classList.add('hidden');
+                
+                let conditionScores = {};
+                let suggestedMeds = new Set();
+                let highestScore = 0;
+                let mostLikelyCondition = "Could Not Find Match";
+
+                const symptomsArray = symptom.split(',').map(s => s.trim());
+
+                symptomsArray.forEach(symptom => {
+                    if (symptomDataSet[symptom]) {
+                        for (const condition in symptomDataSet[symptom]) {
+                            const score = symptomDataSet[symptom][condition];
+                            conditionScores[condition] = (conditionScores[condition] || 0) + score;
+                            if (conditionScores[condition] > highestScore) {
+                                highestScore = conditionScores[condition];
+                                mostLikelyCondition = condition;
+                            }
+                        }
+                    }
+                });
+
+                if (highestScore > 0) {
+                    // Add medication suggestions based on the most likely condition
+                    if (conditionMedications[mostLikelyCondition]) {
+                        conditionMedications[mostLikelyCondition].forEach(med => suggestedMeds.add(med));
+                    }
+                    
+                    // Context-aware adjustments
+                    let contextualAdvice = '';
+                    if (currentProblems.includes(mostLikelyCondition)) {
+                        contextualAdvice = `<p class="text-sm text-red-600 font-semibold mt-2">This may be related to your ongoing condition of ${mostLikelyCondition}. Please follow your doctor's care plan.</p>`;
+                    }
+                    
+                    const medicationAdvice = suggestedMeds.size > 0 ? `
+                        <h4 class="text-md font-semibold text-gray-800 mt-4">Suggested Medications:</h4>
+                        <p class="text-sm text-gray-600 mb-2">Always consult a doctor before taking any medication.</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            ${Array.from(suggestedMeds).map(med => `<li>${med}</li>`).join('')}
+                        </ul>
+                    ` : `<p class="text-sm text-gray-600 mt-4">No specific medication is commonly suggested for this symptom. Please consult a doctor for a proper diagnosis and treatment plan.</p>`;
+
+                    const resultHTML = `
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2">Possible Condition: ${mostLikelyCondition.charAt(0).toUpperCase() + mostLikelyCondition.slice(1)}</h3>
+                        <p class="text-gray-700">Based on your symptoms, a possible condition is **${mostLikelyCondition}**. ${contextualAdvice}</p>
+                        ${medicationAdvice}
+                    `;
+                    resultsOutput.innerHTML = resultHTML;
+                    addMedsToLogBtn.classList.remove('hidden');
+
+                    addMedsToLogBtn.onclick = () => {
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2">Could Not Find Match</h3>
+                        <p class="text-gray-700">We couldn't find a specific match for your symptoms. Please consult a healthcare professional for a proper diagnosis.</p>
+                    `;
+                }
+                const newEntry = { type: 'symptom', symptoms: symptom, condition: mostLikelyCondition, date: new Date().toISOString() };
+                addHistoryEntry(newEntry);
+                symptomsInput.value = '';
+            });
+            
+            // --- Dashboard Logic ---
+
+            const renderMetricInputs = () => {
+                const metricType = metricTypeSelect.value;
+                if (metricType === 'weight' || metricType === 'steps' || metricType === 'sleep') {
+                    html = `
+                        <div>
+                            <label for="value" class="block text-gray-700 font-semibold mb-2">Value:</label>
+                            <input type="number" id="value" name="value" placeholder="Enter value" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                    `;
+                } else if (metricType === 'bloodPressure') {
+                    html = `
+                        <div>
+                            <label for="systolic" class="block text-gray-700 font-semibold mb-2">Systolic (Top Number):</label>
+                            <input type="number" id="systolic" name="systolic" placeholder="e.g., 120" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                        <div>
+                            <label for="diastolic" class="block text-gray-700 font-semibold mb-2">Diastolic (Bottom Number):</label>
+                            <input type="number" id="diastolic" name="diastolic" placeholder="e.g., 80" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                        </div>
+                    `;
+                }
+                inputFieldsContainer.innerHTML = html;
+            };
+
+            const addHistoryEntry = (entry) => {
+                healthData.symptomHistory.push(entry);
+                localStorage.setItem(HEALTH_DATA_KEY, JSON.stringify(healthData));
+                renderHealthTimeline();
+            };
+
+            const renderHealthTimeline = () => {
+                healthTimeline.innerHTML = '';
+                const allEntries = [
+                    ...healthData.symptomHistory,
+                    ...Object.entries(healthData.metrics).flatMap(([metric, entries]) =>
+                        entries.map(entry => ({ ...entry, type: metric }))
+                    ),
+                    ...healthData.medications.map(med => ({ ...med, type: 'medication' })),
+                    ...healthData.problems.map(prob => ({ ...prob, type: 'problem' }))
+                ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (allEntries.length === 0) {
+                    healthTimeline.appendChild(noHistoryMessage);
+                    noHistoryMessage.classList.remove('hidden');
+                    return;
+                }
+                noHistoryMessage.classList.add('hidden');
+
+                allEntries.forEach(entry => {
+                    let content = '';
+                    let icon = '';
+                    let color = '';
+                    if (entry.type === 'symptom') {
+                        content = `<span class="font-bold capitalize">${entry.symptoms}</span> checked`;
+                        icon = '🩺';
+                        color = 'bg-blue-100 border-blue-300';
+                    } else if (entry.type === 'weight') {
+                        content = `Weight added: <span class="font-bold">${entry.value} kg</span>`;
+                        icon = '⚖️';
+                        color = 'bg-green-100 border-green-300';
+                    } else if (entry.type === 'bloodPressure') {
+                        content = `Blood Pressure added: <span class="font-bold">${entry.systolic}/${entry.diastolic} mmHg</span>`;
+                        icon = '❤️';
+                        color = 'bg-red-100 border-red-300';
+                    } else if (entry.type === 'steps') {
+                        content = `Steps added: <span class="font-bold">${entry.value}</span>`;
+                        icon = '👟';
+                        color = 'bg-indigo-100 border-indigo-300';
+                    } else if (entry.type === 'sleep') {
+                        content = `Sleep added: <span class="font-bold">${entry.value} hours</span>`;
+                        icon = '💤';
+                        color = 'bg-purple-100 border-purple-300';
+                    } else if (entry.type === 'medication') {
+                        content = `Medication added: <span class="font-bold">${entry.name}</span> (${entry.status})`;
+                        icon = '💊';
+                        color = 'bg-orange-100 border-orange-300';
+                    } else if (entry.type === 'problem') {
+                        content = `Ongoing problem added: <span class="font-bold">${entry.name}</span>`;
+                        icon = '⚠️';
+                        color = 'bg-yellow-100 border-yellow-300';
+                    }
+                    
+                    const timelineItem = document.createElement('div');
+                    timelineItem.className = `p-4 rounded-xl shadow-sm border ${color}`;
+                    timelineItem.innerHTML = `
+                        <div class="flex items-center space-x-2 text-gray-600">
+                            <span class="text-xl">${icon}</span>
+                            <span>${new Date(entry.date).toLocaleDateString()}</span>
+                        </div>
+                let html = '';
+
+                    resultsOutput.innerHTML = `
+                        <p class="mt-2 text-gray-800">${content}</p>
+
+                    `;
+                    healthTimeline.appendChild(timelineItem);
+
+                });
+
+            };
+
+
+            const renderChart = (metric) => {
+
+                const ctx = document.getElementById('metric-chart').getContext('2d');
+                if (myChart) {
+                    myChart.destroy();
+
+                }
+
+
+                const data = healthData.metrics[metric] || [];
+                const labels = data.map(entry => new Date(entry.date).toLocaleDateString());
+                let values = [];
+
+                if (metric === 'bloodPressure') {
+                    values = data.map(entry => entry.systolic);
+                    const diastolicValues = data.map(entry => entry.diastolic);
+                    myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Systolic Blood Pressure',
+                                data: values,
+                                borderColor: 'rgb(59, 130, 246)',
+                                tension: 0.1,
+                                fill: false,
+                            }, {
+                                label: 'Diastolic Blood Pressure',
+                                data: diastolicValues,
+                                borderColor: 'rgb(239, 68, 68)',
+                                tension: 0.1,
+                                fill: false,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: 'top' } },
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    title: { display: true, text: 'mmHg' }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    values = data.map(entry => entry.value);
+                    myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: `${metric.charAt(0).toUpperCase() + metric.slice(1)}`,
+                                data: values,
+                                borderColor: 'rgb(59, 130, 246)',
+                                tension: 0.1,
+                                fill: false,
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    title: { display: true, text: metric === 'weight' ? 'kg' : (metric === 'steps' ? 'steps' : 'hours') }
+                                }
+                            }
+                        }
+                    });
+                }
+            };
+
+            metricsForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const metricType = metricTypeSelect.value;
+                let newEntry = null;
+
+                if (metricType === 'weight' || metricType === 'steps' || metricType === 'sleep') {
+                    const value = document.getElementById('value').value;
+                    if (value) {
+                        newEntry = { value: parseFloat(value), date: new Date().toISOString() };
+                    }
+                } else if (metricType === 'bloodPressure') {
+                    const systolic = document.getElementById('systolic').value;
+                    const diastolic = document.getElementById('diastolic').value;
+                    if (systolic && diastolic) {
+                        newEntry = { systolic: parseFloat(systolic), diastolic: parseFloat(diastolic), date: new Date().toISOString() };
+                    }
+                }
+
+                if (newEntry) {
+                    healthData.metrics[metricType].push(newEntry);
+                    localStorage.setItem(HEALTH_DATA_KEY, JSON.stringify(healthData));
+                    renderChart(metricType);
+                    renderHealthTimeline();
+                    e.target.reset();
+                }
+            });
+            
+            medicationForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const selectedMeds = Array.from(document.querySelectorAll('#medications-by-problem-list input[type="checkbox"]:checked')).map(cb => ({
+                    name: cb.value,
+                    status: document.querySelector(`select[data-med-name="${cb.value}"]`).value,
+                    type: 'medication',
+                    date: new Date().toISOString()
+                }));
+
+                const otherMedName = otherMedInput.value.trim();
+                if (otherMedName) {
+                    selectedMeds.push({
+                        name: otherMedName,
+                        status: 'Currently Using', // Default status for manually added meds
+                        type: 'medication',
+                        date: new Date().toISOString()
+                    });
+                }
+
+                if (selectedMeds.length > 0) {
+                    selectedMeds.forEach(med => {
+                        const existingMed = healthData.medications.find(m => m.name === med.name);
+                        if (!existingMed) {
+                            healthData.medications.push(med);
+                        }
+                    });
+                    localStorage.setItem(HEALTH_DATA_KEY, JSON.stringify(healthData));
+                    renderMedicationList();
+                    renderHealthTimeline();
+                    renderMedicationsByProblem();
+                    otherMedInput.value = '';
+                }
+            });
+
+            addProblemsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedOptions = Array.from(problemsSelect.selectedOptions).map(option => option.value);
+                selectedOptions.forEach(problemName => {
+                    const existingProblem = healthData.problems.find(p => p.name === problemName);
+                    if (!existingProblem) {
+                        const newProblem = { name: problemName, date: new Date().toISOString() };
+                        healthData.problems.push(newProblem);
+                    }
+                });
+                localStorage.setItem(HEALTH_DATA_KEY, JSON.stringify(healthData));
+                renderProblemsList();
+                renderHealthTimeline();
+                renderMedicationsByProblem();
+                problemsSelect.selectedIndex = -1; // Deselect options
+            });
+            
+            const renderMedicationList = () => {
+                medicationList.innerHTML = '';
+                if (healthData.medications.length === 0) {
+                    medicationList.innerHTML = '<p class="text-gray-500 text-sm">No medications added yet.</p>';
+                    return;
+                }
+                healthData.medications.forEach(med => {
+                    const pill = document.createElement('div');
+                    pill.className = 'bg-orange-200 text-orange-800 text-sm font-semibold px-3 py-1 rounded-full flex justify-between items-center';
+                    pill.innerHTML = `
+                        <span>${med.name} (${med.status})</span>
+                        <button class="text-orange-600 hover:text-orange-800 transition-colors" onclick="deleteMedication('${med.name}')">x</button>
+                    `;
+                    medicationList.appendChild(pill);
+                });
+            };
+
+            const renderProblemsList = () => {
+                problemsList.innerHTML = '';
+                if (healthData.problems.length === 0) {
+                    problemsList.innerHTML = '<p class="text-gray-500 text-sm">No problems added yet.</p>';
+                    return;
+                }
+                healthData.problems.forEach(prob => {
+                    const pill = document.createElement('div');
+                    pill.className = 'bg-red-200 text-red-800 text-sm font-semibold px-3 py-1 rounded-full flex justify-between items-center';
+                    pill.innerHTML = `
+                        <span>${prob.name}</span>
+                        <button class="text-red-600 hover:text-red-800 transition-colors" onclick="deleteProblem('${prob.name}')">x</button>
+                    `;
+                    problemsList.appendChild(pill);
+                });
+            };
+
+            const renderMedicationsByProblem = () => {
+                medicationsByProblemList.innerHTML = ''; // Clear the list first
+                const selectedProblemNames = Array.from(problemsSelect.selectedOptions).map(option => option.value);
+                
+                let medicationsToDisplay = [];
+                selectedProblemNames.forEach(problem => {
+                    if (problemMedications[problem]) {
+                        medicationsToDisplay = medicationsToDisplay.concat(problemMedications[problem].map(med => ({ name: med, problem: problem })));
+                    }
+                });
+
+                const uniqueMeds = [...new Map(medicationsToDisplay.map(item => [item.name, item])).values()];
+                const filteredMeds = uniqueMeds.filter(med => !healthData.medications.some(m => m.name === med.name));
+
+                if (filteredMeds.length === 0 && otherMedInput.value.trim() === '') {
+                    medicationForm.style.display = 'none';
+                    return;
+                } else {
+                    medicationForm.style.display = 'block';
+                }
+
+                filteredMeds.forEach(med => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center space-x-2 p-2 border border-gray-200 rounded-lg bg-white shadow-sm';
+                    div.innerHTML = `
+                        <input type="checkbox" id="med-${med.name}" name="medications" value="${med.name}" class="form-checkbox h-5 w-5 text-orange-500 rounded-sm focus:ring-orange-500">
+                        <label for="med-${med.name}" class="flex-grow text-gray-700">${med.name} <span class="text-xs text-gray-500"> (for ${med.problem})</span></label>
+                        <select data-med-name="${med.name}" class="p-1 text-xs border rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500">
+                            <option value="Currently Using">Currently Using</option>
+                            <option value="Used Before">Used Before</option>
+                        </select>
+                    `;
+                    medicationsByProblemList.appendChild(div);
+                });
+            };
+
+            window.deleteMedication = (name) => {
+                healthData.medications = healthData.medications.filter(med => med.name !== name);
+                localStorage.setItem(HEALTH_DATA_KEY, JSON.stringify(healthData));
+                renderMedicationList();
+                renderHealthTimeline();
+                renderMedicationsByProblem();
+            };
+
+            window.deleteProblem = (name) => {
+                healthData.problems = healthData.problems.filter(prob => prob.name !== name);
+                localStorage.setItem(HEALTH_DATA_KEY, JSON.stringify(healthData));
+                renderProblemsList();
+                renderHealthTimeline();
+                renderMedicationsByProblem();
+            };
+            
+            problemsSelect.addEventListener('change', () => {
+                renderMedicationsByProblem();
+            });
+
+            metricTypeSelect.addEventListener('change', () => {
+                renderMetricInputs();
+                renderChart(metricTypeSelect.value);
+            });
+            
+            // Initial render calls
+            renderMetricInputs();
+            renderChart(metricTypeSelect.value);
+            renderHealthTimeline();
+            renderMedicationList();
+            renderProblemsList();
+            renderMedicationsByProblem();
+        });
+    </script>
+
+</body>
+</html>
+
