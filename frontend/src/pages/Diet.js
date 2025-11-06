@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { Apple, Plus, TrendingUp, Droplet } from 'lucide-react';
 
@@ -33,7 +33,7 @@ const Diet = () => {
 
   const fetchMealRecommendations = async (mealType) => {
     try {
-      const res = await axios.get(`/api/diet/meal-recommendations?mealType=${mealType}`);
+      const res = await api.get(`/api/diet/meal-recommendations?mealType=${mealType}`);
       setMealRecommendations(res.data.recommendations);
       setSelectedMealType(mealType);
       setShowRecommendations(true);
@@ -45,7 +45,7 @@ const Diet = () => {
 
   const fetchDietLogs = async () => {
     try {
-      const res = await axios.get('/api/diet?limit=7');
+      const res = await api.get('/api/diet?limit=7');
       setDietLogs(res.data.dietLogs || []);
     } catch (error) {
       console.error('Error fetching diet logs:', error);
@@ -54,7 +54,7 @@ const Diet = () => {
 
   const fetchAnalysis = async () => {
     try {
-      const res = await axios.get('/api/diet/analysis?days=7');
+      const res = await api.get('/api/diet/analysis?days=7');
       setAnalysis(res.data);
     } catch (error) {
       console.error('Error fetching analysis:', error);
@@ -64,7 +64,7 @@ const Diet = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/diet', formData);
+      await api.post('/api/diet', formData);
       toast.success('Diet log added!');
       setShowAddForm(false);
       setFormData({

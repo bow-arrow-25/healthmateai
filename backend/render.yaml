@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: healthmate-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: WEATHER_API_KEY
+        value: ec4c02871dde552956e03c82be46dad2
+      - key: FRONTEND_URL
+        sync: false

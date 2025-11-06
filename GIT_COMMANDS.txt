@@ -1,0 +1,26 @@
+# Git Commands to Push Your Code
+
+# Step 1: Create a new repository on GitHub first
+# Go to https://github.com/new and create a repository named "HealthMate-Symptom-Checker"
+# DO NOT initialize with README, .gitignore, or license
+
+# Step 2: Run these commands in order:
+
+# Initialize git (if not already done)
+git init
+
+# Add all files
+git add .
+
+# Commit your changes
+git commit -m "Initial commit - HealthMate full stack application"
+
+# Add your GitHub repository as remote (REPLACE with your actual GitHub username)
+git remote add origin https://github.com/YOUR_USERNAME/HealthMate-Symptom-Checker.git
+
+# Push to GitHub
+git push -u origin main
+
+# If you get an error about 'master' branch, use this instead:
+git branch -M main
+git push -u origin main

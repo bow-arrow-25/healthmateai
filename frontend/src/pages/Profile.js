@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { User, Mail, Calendar, UserCircle } from 'lucide-react';
@@ -17,7 +17,7 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put('/api/users/profile', formData);
+      const res = await api.put('/api/users/profile', formData);
       updateUser(res.data.user);
       toast.success('Profile updated!');
       setEditing(false);

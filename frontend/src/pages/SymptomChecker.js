@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { Search, AlertCircle, Pill, Calendar, ThermometerSun } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -34,7 +34,7 @@ const SymptomChecker = () => {
 
   const fetchWeather = async () => {
     try {
-      const res = await axios.get('/api/weather/current?city=Default');
+      const res = await api.get('/api/weather/current?city=Default');
       setWeather(res.data.weather);
     } catch (error) {
       console.error('Weather fetch error:', error);
@@ -48,7 +48,7 @@ const SymptomChecker = () => {
     }
 
     try {
-      const res = await axios.get(`/api/symptoms/suggestions?query=${query}`);
+      const res = await api.get(`/api/symptoms/suggestions?query=${query}`);
       setSuggestions(res.data.suggestions || []);
     } catch (error) {
       console.error('Suggestions error:', error);
@@ -100,7 +100,7 @@ const SymptomChecker = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post('/api/symptoms/check', {
+      const res = await api.post('/api/symptoms/check', {
         symptoms,
         duration: duration.value ? duration : null
       });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { Activity, Pill, TrendingUp, AlertCircle, Heart, Calendar, Cloud, Wind, Scale, MapPin } from 'lucide-react';
 
@@ -38,7 +38,7 @@ const Dashboard = () => {
 
   const fetchWeather = async (lat, lon) => {
     try {
-      const res = await axios.get(`/api/weather/current?lat=${lat}&lon=${lon}`);
+      const res = await api.get(`/api/weather/current?lat=${lat}&lon=${lon}`);
       setWeather(res.data);
     } catch (error) {
       console.error('Weather fetch error:', error);
@@ -47,7 +47,7 @@ const Dashboard = () => {
 
   const fetchAirQuality = async (lat, lon) => {
     try {
-      const res = await axios.get(`/api/weather/air-quality?lat=${lat}&lon=${lon}`);
+      const res = await api.get(`/api/weather/air-quality?lat=${lat}&lon=${lon}`);
       setAirQuality(res.data);
     } catch (error) {
       console.error('Air quality fetch error:', error);
@@ -56,7 +56,7 @@ const Dashboard = () => {
 
   const fetchDashboard = async () => {
     try {
-      const res = await axios.get('/api/health/dashboard');
+      const res = await api.get('/api/health/dashboard');
       setDashboard(res.data.dashboard);
     } catch (error) {
       console.error('Dashboard fetch error:', error);

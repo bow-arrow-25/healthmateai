@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { Pill, Plus, Clock, Bell, Trash2, Edit2, Package, X } from 'lucide-react';
 
@@ -31,7 +31,7 @@ const Medicines = () => {
 
   const fetchMedicines = async () => {
     try {
-      const res = await axios.get('/api/medicines');
+      const res = await api.get('/api/medicines');
       setMedicines(res.data.medicines || []);
     } catch (error) {
       console.error('Error fetching medicines:', error);
@@ -44,7 +44,7 @@ const Medicines = () => {
       return;
     }
     try {
-      const res = await axios.get(`/api/medicines/suggestions?query=${query}`);
+      const res = await api.get(`/api/medicines/suggestions?query=${query}`);
       setMedicineSuggestions(res.data.suggestions || []);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
@@ -71,7 +71,7 @@ const Medicines = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/medicines', formData);
+      await api.post('/api/medicines', formData);
       setShowAddForm(false);
       setFormData({
         name: '',
@@ -91,7 +91,7 @@ const Medicines = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to remove this medicine?')) {
       try {
-        await axios.delete(`/api/medicines/${id}`);
+        await api.delete(`/api/medicines/${id}`);
         fetchMedicines();
       } catch (error) {
         toast.error('Error removing medicine');
@@ -101,7 +101,7 @@ const Medicines = () => {
 
   const handleQuantityUpdate = async (medicineId, newQuantity, unit) => {
     try {
-      await axios.put(`/api/medicines/${medicineId}`, {
+      await api.put(`/api/medicines/${medicineId}`, {
         quantity: parseInt(newQuantity),
         quantityUnit: unit
       });
@@ -114,7 +114,7 @@ const Medicines = () => {
 
   const handleFrequencyUpdate = async (medicineId, newFrequency) => {
     try {
-      await axios.put(`/api/medicines/${medicineId}`, {
+      await api.put(`/api/medicines/${medicineId}`, {
         frequency: newFrequency
       });
       fetchMedicines();
@@ -126,7 +126,7 @@ const Medicines = () => {
 
   const handleTimingsUpdate = async (medicineId, newTimings) => {
     try {
-      await axios.put(`/api/medicines/${medicineId}`, {
+      await api.put(`/api/medicines/${medicineId}`, {
         timings: newTimings
       });
       fetchMedicines();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../utils/api';
 import toast from 'react-hot-toast';
 import { FileText, Upload, Camera, Plus } from 'lucide-react';
 
@@ -15,7 +15,7 @@ const Prescriptions = () => {
 
   const fetchPrescriptions = async () => {
     try {
-      const res = await axios.get('/api/prescriptions');
+      const res = await api.get('/api/prescriptions');
       setPrescriptions(res.data.prescriptions || []);
     } catch (error) {
       console.error('Error fetching prescriptions:', error);
@@ -37,7 +37,7 @@ const Prescriptions = () => {
     formData.append('prescription', selectedFile);
 
     try {
-      const res = await axios.post('/api/prescriptions/upload', formData, {
+      const res = await api.post('/api/prescriptions/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       toast.success('Prescription uploaded and processed!');
@@ -52,7 +52,7 @@ const Prescriptions = () => {
 
   const addMedicinesToList = async (prescriptionId) => {
     try {
-      const res = await axios.post(`/api/prescriptions/${prescriptionId}/add-medicines`);
+      const res = await api.post(`/api/prescriptions/${prescriptionId}/add-medicines`);
       toast.success(res.data.message || 'All medicines added to your list!');
       if (res.data.addedAt) {
         const addedTime = new Date(res.data.addedAt);
