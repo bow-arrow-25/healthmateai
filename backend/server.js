@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cron = require('node-cron');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -50,6 +51,17 @@ cron.schedule('0 * * * *', async () => {
   console.log('🔔 Running scheduled reminder check...');
   await sendReminders();
 });
+
+// Serve static files from React frontend in production
+if (process.env.NODE_ENV === 'production') {
+  const frontendBuildPath = path.join(__dirname, '../frontend/build');
+  app.use(express.static(frontendBuildPath));
+  
+  // Catch-all route to serve React app for any non-API routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

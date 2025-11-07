@@ -1,4 +1,4 @@
-@echo off
+de@echo off
 echo ========================================
 echo    HealthMate - Quick Start Script
 echo ========================================
