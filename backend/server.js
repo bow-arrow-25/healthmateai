@@ -11,12 +11,19 @@ dotenv.config();
 const app = express();
 
 // Middleware
+// In production, frontend and backend are served from same domain, so allow all origins
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.NODE_ENV === 'production' ? true : (process.env.FRONTEND_URL || 'http://localhost:3000'),
   credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
 
 // Static files for uploaded prescriptions
 app.use('/uploads', express.static('uploads'));
@@ -76,4 +83,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 MongoDB: ${process.env.MONGODB_URI ? 'Connected' : 'Using local'}`);
+  console.log(`🌐 CORS: ${process.env.NODE_ENV === 'production' ? 'All origins allowed' : 'Localhost only'}`);
 });
